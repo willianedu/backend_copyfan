@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn, Timestamp } from "typeorm"
 import { v4 as uuid } from "uuid"
 
 @Entity("perfil")
-export class Pagamento {
+export class Perfil {
     
     @PrimaryColumn()
     id: string
