@@ -11,16 +11,16 @@ export class Pagamento {
     datahorapagamento: Timestamp
 
     @Column()
-    statuspagamento: boolean
+    statusPagamento: boolean
 
     @Column({ nullable: false })
-    valorTotal: Date
+    valorTotal: number 
 
     @Column({ nullable: false })
     meioPagamento: string
 
     constructor(){
         this.id = uuid()
-        this.statuspagamento = false
+        this.statusPagamento = false
     }
 }

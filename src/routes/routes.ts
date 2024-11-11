@@ -1,8 +1,10 @@
 import { Router } from "express"
-import { TaskController } from "../controllers/taskController"
+import { PagamentoController } from "../controllers/pagamentoController"
+import { PerfilController } from "../controllers/perfilController"
 
 const router = Router()
-const controller = new TaskController()
+const controllerPagamento = new PagamentoController()
+const controllerPerfil = new PerfilController()
 
 // Rota da tela principal
 router.get("/", (request, response) => {
@@ -10,14 +12,25 @@ router.get("/", (request, response) => {
 })
 
 // Rota Read All
-router.get("/tasks", controller.readAllTask)
+router.get("/pagamentos", controllerPagamento.readAllPagamento)
 // Rota Read One
-router.get("/tasks/:id", controller.readOneTask)
+router.get("/pagamentos/:id", controllerPagamento.readOnePagamento)
 // Rota Create
-router.post("/tasks", controller.createTask)
+router.post("/pagamentos", controllerPagamento.createPagamento)
 // Rota Update
-router.put("/tasks/:id", controller.updateTask)
+router.put("/pagamentos/:id", controllerPagamento.updatePagamento)
 // Rota Delete
-router.delete("/tasks/:id", controller.deleteTask)
+router.delete("/pagamentos/:id", controllerPagamento.deletePagamento)
+
+// Rota Read All
+router.get("/pagamentos", controllerPerfil.readAllPerfil)
+// Rota Read One
+router.get("/pagamentos/:id", controllerPerfil.readOnePerfil)
+// Rota Create
+router.post("/pagamentos", controllerPerfil.createPerfil)
+// Rota Update
+router.put("/pagamentos/:id", controllerPerfil.updatePerfil)
+// Rota Delete
+router.delete("/pagamentos/:id", controllerPerfil.deletePerfil)
 
 export default router
