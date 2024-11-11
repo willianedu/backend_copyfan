@@ -44,7 +44,8 @@ export class PerfilController {
 
     async updatePerfil(req: Request, res: Response){
         const { id } = req.params
-        const result = await service.updatePerfil({id})
+        const { descricao } = req.body
+        const result = await service.updatePerfil({id, descricao})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }

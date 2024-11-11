@@ -21,6 +21,7 @@ type findPerfilRequest = {
 
 type updatePerfilRequest = {
     id: string
+    descricao: string
 }
 
 export class PerfilService {
@@ -65,7 +66,7 @@ export class PerfilService {
         }
     }
     
-    async updatePerfil({ id} : updatePerfilRequest): Promise<Perfil | Error> {
+    async updatePerfil({ id, descricao} : updatePerfilRequest): Promise<Perfil | Error> {
         try {
             // SELECT * FROM Perfils WHERE id = id LIMIT 1
             const perfil = await cursor.findOne({ where: {id}})
@@ -73,6 +74,7 @@ export class PerfilService {
                 return new Error("Perfil not found!")
             }
             // Se houver uma nova descrição e/ou data informados pelo usuário vindos da requisição, a tarefa será atualizada com os novos dados; senão, os dados antigos serão mantidos.
+            perfil.descricao = descricao
             // UPDATE Perfils WHERE id = id SET description = description, date_Perfil = date_Perfil
             await cursor.save(perfil)
             return perfil

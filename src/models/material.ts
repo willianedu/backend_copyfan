@@ -1,30 +1,28 @@
 import { Column, Entity, PrimaryColumn } from "typeorm"
 import { v4 as uuid } from "uuid"
 
-@Entity("pagamento")
-export class Pagamento {
+@Entity("material")
+export class Material {
     
     @PrimaryColumn()
     id: string
 
     @Column()
-    datahorapagamento: Date
+    file: File
 
     @Column()
-    statusPagamento: boolean
+    curso: string
 
     @Column()
-    valorTotal: number
+    turma: string
 
     @Column()
-    meioPagamento: string
+    periodo: string
 
     @Column()
-    valores_id: string
+    usuario_id: string
 
     constructor(){
         this.id = uuid()
-        this.statusPagamento = false
-        this.datahorapagamento = new Date()
     }
 }
