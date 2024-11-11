@@ -9,10 +9,8 @@ const cursor = DevDataSource.getRepository(Pagamento)
 // 2) Cria interfaces para receber dados do CONTROLLER, que por sua vez vieram da Requisição HTTP lá do FRONTEND
 
 type newPagamentoRequest = {
-    datahorapagamento: Timestamp
     valorTotal: number 
     meioPagamento: string
-    statusPagamento: boolean
 }
 
 type findPagamentoRequest = {
@@ -24,11 +22,11 @@ type updatePagamentoRequest = {
 }
 
 export class PagamentoService {
-    async createPagamento({datahorapagamento, valorTotal, meioPagamento, statusPagamento} : newPagamentoRequest) : Promise<Pagamento | Error> {
+    async createPagamento({valorTotal, meioPagamento} : newPagamentoRequest) : Promise<Pagamento | Error> {
         try {
             // INSERT INTO pagamentos VALUES(description, date_pagamento)
             const pagamento = cursor.create({
-              datahorapagamento,valorTotal,meioPagamento, statusPagamento
+              valorTotal,meioPagamento
             })
             // A função cursor.save() executa a instrução INSERT na tabela
             await cursor.save(pagamento)

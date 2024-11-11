@@ -23,14 +23,14 @@ router.put("/pagamentos/:id", controllerPagamento.updatePagamento)
 router.delete("/pagamentos/:id", controllerPagamento.deletePagamento)
 
 // Rota Read All
-router.get("/pagamentos", controllerPerfil.readAllPerfil)
+router.get("/perfis", controllerPerfil.readAllPerfil)
 // Rota Read One
-router.get("/pagamentos/:id", controllerPerfil.readOnePerfil)
+router.get("/perfis/:id", controllerPerfil.readOnePerfil)
 // Rota Create
-router.post("/pagamentos", controllerPerfil.createPerfil)
+router.post("/perfis", controllerPerfil.createPerfil)
 // Rota Update
-router.put("/pagamentos/:id", controllerPerfil.updatePerfil)
+router.put("/perfis/:id", controllerPerfil.updatePerfil)
 // Rota Delete
-router.delete("/pagamentos/:id", controllerPerfil.deletePerfil)
+router.delete("/perfis/:id", controllerPerfil.deletePerfil)
 
 export default router

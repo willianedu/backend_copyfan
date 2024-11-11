@@ -8,7 +8,7 @@ export class Pagamento {
     id: string
 
     @Column({ nullable: false })
-    datahorapagamento: Timestamp
+    datahorapagamento: Date
 
     @Column()
     statusPagamento: boolean
@@ -22,5 +22,6 @@ export class Pagamento {
     constructor(){
         this.id = uuid()
         this.statusPagamento = false
+        this.datahorapagamento = new Date()
     }
 }
