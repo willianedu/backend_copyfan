@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
-import { Task } from "../models/pagamento";
+import { Pagamento } from "../models/pagamento";
+import { Perfil } from "../models/perfil";
+import { Valores } from "../models/valores";
 
 // export const DevDataSource = new DataSource({
 //     type: "postgres",
@@ -13,13 +15,10 @@ import { Task } from "../models/pagamento";
 
 export const DevDataSource = new DataSource({
     type: "postgres",
-    host: "dpg-cskl08u8ii6s73ft0k30-a.oregon-postgres.render.com",
+    host: "localhost",
     port: 5432,
-    username: "unifan_pds_tils_user",
-    password: "IIEgh4gX7lUWjVWChKfjiMLXDPeBE9ov",
-    database: "unifan_pds_tils",
-    entities: [Task],
-    extra: {
-        options: "-c statement_timeout=50000ms -c search_parth=monsters",
-    },
+    username: "postgres",
+    password: "postgres",
+    database: "backend_copyfan",
+    entities: [Pagamento,Perfil,Valores]
 })

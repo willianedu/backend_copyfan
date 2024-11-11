@@ -1,60 +1,60 @@
 import { Request, Response } from "express"
-import { PerfilService } from "../services/perfilService"
+import {ValoresService } from "../services/valoresService"
 
-const service = new PerfilService()
+const service = new ValoresService()
 
-export class PerfilController {
-    async createPerfil(req: Request, res: Response){
+export class ValoresController {
+    async createValores(req: Request, res: Response){
         // Captura informações do formulário
-        const {  descricao, criar_usuario, editar_usuario, excluir_usuario,  ler_usuario} = req.body
+        const { descricao, valor} = req.body
         // Passa informações capturadas para o service
-        const result = await service.createPerfil({descricao, criar_usuario, editar_usuario, excluir_usuario,  ler_usuario})
+        const result = await service.createValores({ descricao, valor})
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro
             return res.status(500).json(result.message)
         }
-        // Do contrário, se for uma nova Perfil, retorne-a para o usuário
+        // Do contrário, se for uma nova Valores, retorne-a para o usuário
         return res.status(201).json(result)
     }
 
-    async readAllPerfil(req: Request, res: Response){
+    async readAllValores(req: Request, res: Response){
         // A variável "result" nesse caso será uma lista de tarefas
-        const result = await service.readAllPerfil()
+        const result = await service.readAllValores()
         if (result instanceof Error) {
             return res.status(500).json(result.message)
         }
         // Se a lista estiver vazia
         if (result.length == 0) {
             // Mostre a seguinte mensagem para o usuário
-            return res.status(200).json("No perfils found")
+            return res.status(200).json("No valoress found")
         }
         // Do contrário, devolva a lista para o usuário
         return res.status(200).json(result)
     }
 
-    async readOnePerfil(req: Request, res: Response){
+    async readOneValores(req: Request, res: Response){
         const { id } = req.params
-        const result = await service.readOnePerfil({id})
+        const result = await service.readOneValores({id})
         if (result instanceof Error) {
             res.status(404).json(result.message)
         }
         return res.json(result)
     }
 
-    async updatePerfil(req: Request, res: Response){
+    async updateValores(req: Request, res: Response){
         const { id } = req.params
-        const { descricao } = req.body
-        const result = await service.updatePerfil({id, descricao})
+        const { descricao,valor } = req.body
+        const result = await service.updateValores({id, descricao, valor})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }
         return res.status(200).json(result)
     }
 
-    async deletePerfil(req: Request, res: Response){
+    async deleteValores(req: Request, res: Response){
         const { id } = req.params
-        const result = await service.deletePerfil({ id })
+        const result = await service.deleteValores({ id })
         if (result instanceof Error) {
           return res.status(404).json(result.message)
         }

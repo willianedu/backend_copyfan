@@ -1,4 +1,3 @@
-import { Timestamp } from "typeorm";
 import { DevDataSource } from "../connections/dbDev";
 import { Perfil } from "../models/perfil";
 
@@ -22,65 +21,66 @@ type findPerfilRequest = {
 
 type updatePerfilRequest = {
     id: string
+    descricao: string
 }
 
 export class PerfilService {
     async createPerfil({descricao, criar_usuario, editar_usuario, excluir_usuario,ler_usuario} : newPerfilRequest) : Promise<Perfil | Error> {
         try {
-            // INSERT INTO pagamentos VALUES(description, date_pagamento)
-            const pagamento = cursor.create({
+            // INSERT INTO perfils VALUES(description, date_perfil)
+            const perfil = cursor.create({
               descricao,criar_usuario,editar_usuario, excluir_usuario,ler_usuario
             })
             // A função cursor.save() executa a instrução INSERT na tabela
-            await cursor.save(pagamento)
-            return pagamento
+            await cursor.save(perfil)
+            return perfil
         }
         catch(err){
-            return new Error("Unexpected error saving pagamento!")
+            return new Error("Unexpected error saving perfil!")
         }
     }
     
     async readOnePerfil({ id } : findPerfilRequest) : Promise<Perfil | Error> {
         try {
-            // SELECT * FROM pagamentos WHERE id = id LIMIT 1
-            const pagamento = await cursor.findOne({ where: {id}})
-            if(!pagamento) {
+            // SELECT * FROM perfils WHERE id = id LIMIT 1
+            const perfil = await cursor.findOne({ where: {id}})
+            if(!perfil) {
                 return new Error("Perfil not found!")
             }
-            return pagamento
+            return perfil
         }
         catch(err) {
-            return new Error("Unexpected error reading pagamento!")
+            return new Error("Unexpected error reading perfil!")
         }
         
     }
     
     async readAllPerfil(): Promise<Perfil[] | Error> {
         try {
-            // SELECT * FROM pagamentos
-            const pagamentos = await cursor.find()
-            return pagamentos
+            // SELECT * FROM perfils
+            const perfil = await cursor.find()
+            return perfil
         } 
         catch(err){
-            return new Error("Unexpected error reading pagamentos!")
+            return new Error("Unexpected error reading perfils!")
         }
     }
     
-    async updatePerfil({ id} : updatePerfilRequest): Promise<Perfil | Error> {
+    async updatePerfil({ id, descricao} : updatePerfilRequest): Promise<Perfil | Error> {
         try {
-            // SELECT * FROM pagamentos WHERE id = id LIMIT 1
-            const pagamento = await cursor.findOne({ where: {id}})
-            if(!pagamento) {
+            // SELECT * FROM perfils WHERE id = id LIMIT 1
+            const perfil = await cursor.findOne({ where: {id}})
+            if(!perfil) {
                 return new Error("Perfil not found!")
             }
             // Se houver uma nova descrição e/ou data informados pelo usuário vindos da requisição, a tarefa será atualizada com os novos dados; senão, os dados antigos serão mantidos.
-            //pagamento.status = status
-            // UPDATE pagamentos WHERE id = id SET description = description, date_pagamento = date_pagamento
-            await cursor.save(pagamento)
-            return pagamento
+            perfil.descricao = descricao
+            // UPDATE perfils WHERE id = id SET description = description, date_perfil = date_perfil
+            await cursor.save(perfil)
+            return perfil
         } 
         catch(err){
-            return new Error("Unexpected error updating pagamento!")
+            return new Error("Unexpected error updating perfil!")
         }
 
         // let x = 10
@@ -101,16 +101,16 @@ export class PerfilService {
     
     async deletePerfil({ id }:findPerfilRequest): Promise<String | Error> { 
         try{
-            // SELECT * FROM pagamentos WHERE id = id LIMIT 1
-            const pagamento = await cursor.findOne({ where: {id}})
-            if(!pagamento) {
+            // SELECT * FROM perfils WHERE id = id LIMIT 1
+            const perfil = await cursor.findOne({ where: {id}})
+            if(!perfil) {
                 return new Error("Perfil not found!")
             }
-            await cursor.delete(pagamento.id)
+            await cursor.delete(perfil.id)
             return "Perfil removed successfully!"
         }
         catch(err){
-            return new Error("Unexpected error deleting pagamento!")
+            return new Error("Unexpected error deleting perfil!")
         }
     }
 }
