@@ -6,9 +6,11 @@ const service = new PerfilService()
 export class PerfilController {
     async createPerfil(req: Request, res: Response){
         // Captura informações do formulário
+
         const {  descricao, criar_usuario, editar_usuario, excluir_usuario,  ler_usuario} = req.body
         // Passa informações capturadas para o service
         const result = await service.createPerfil({descricao, criar_usuario, editar_usuario, excluir_usuario,  ler_usuario})
+
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro
@@ -27,7 +29,9 @@ export class PerfilController {
         // Se a lista estiver vazia
         if (result.length == 0) {
             // Mostre a seguinte mensagem para o usuário
+
             return res.status(200).json("No perfils found")
+
         }
         // Do contrário, devolva a lista para o usuário
         return res.status(200).json(result)

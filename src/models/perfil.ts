@@ -1,4 +1,6 @@
+
 import { Column, Entity, PrimaryColumn, Timestamp } from "typeorm"
+
 import { v4 as uuid } from "uuid"
 
 @Entity("perfil")
@@ -7,7 +9,9 @@ export class Perfil {
     @PrimaryColumn()
     id: string
 
+
     @Column({ nullable: false })
+
     descricao: string
 
     @Column()
@@ -20,6 +24,7 @@ export class Perfil {
     excluir_usuario: boolean
 
     @Column()
+
     ler_usuario: boolean
 
     constructor(){
@@ -28,5 +33,6 @@ export class Perfil {
         this.editar_usuario = false
         this.excluir_usuario = false
         this.ler_usuario = false
+
     }
 }

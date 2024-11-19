@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { PagamentoController } from "../controllers/pagamentoController"
 import { PerfilController } from "../controllers/perfilController"
+
 import { ValoresController } from "../controllers/valoresController"
 
 const router = Router()
@@ -8,12 +9,14 @@ const controllerPagamento = new PagamentoController()
 const controllerPerfil = new PerfilController()
 const controllerValores = new ValoresController()
 
+
 // Rota da tela principal
 router.get("/", (request, response) => {
   return response.json("home page")
 })
 
 // Rota Read All
+
 router.get("/pagamentos", controllerPagamento.readAllPagamento)
 // Rota Read One
 router.get("/pagamentos/:id", controllerPagamento.readOnePagamento)
@@ -44,6 +47,7 @@ router.post("/valores", controllerValores.createValores)
 router.put("/valores/:id", controllerValores.updateValores)
 // Rota Delete
 router.delete("/valores/:id", controllerValores.deleteValores)
+
 
 
 export default router
