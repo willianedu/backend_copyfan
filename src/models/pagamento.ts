@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryColumn } from "typeorm"
+
+import { Column, Entity, PrimaryColumn, Timestamp } from "typeorm"
+
 import { v4 as uuid } from "uuid"
 
 @Entity("pagamento")
@@ -7,20 +9,21 @@ export class Pagamento {
     @PrimaryColumn()
     id: string
 
-    @Column()
+
+    @Column({ nullable: false })
+
     datahorapagamento: Date
 
     @Column()
     statusPagamento: boolean
 
-    @Column()
-    valorTotal: number
 
-    @Column()
+    @Column({ nullable: false })
+    valorTotal: number 
+
+    @Column({ nullable: false })
     meioPagamento: string
 
-    @Column()
-    valores_id: string
 
     constructor(){
         this.id = uuid()

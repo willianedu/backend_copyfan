@@ -1,65 +1,60 @@
 import { Request, Response } from "express"
-import { PagamentoService } from "../services/pagamentoService"
+import {ValoresService } from "../services/valoresService"
 
-const service = new PagamentoService()
+const service = new ValoresService()
 
-export class PagamentoController {
-    async createPagamento(req: Request, res: Response){
+export class ValoresController {
+    async createValores(req: Request, res: Response){
         // Captura informações do formulário
-        const { valorTotal, meioPagamento} = req.body
+        const { descricao, valor} = req.body
         // Passa informações capturadas para o service
-        const result = await service.createPagamento({ valorTotal, meioPagamento})
-
+        const result = await service.createValores({ descricao, valor})
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro
             return res.status(500).json(result.message)
         }
-        // Do contrário, se for uma nova Pagamento, retorne-a para o usuário
+        // Do contrário, se for uma nova Valores, retorne-a para o usuário
         return res.status(201).json(result)
     }
 
-    async readAllPagamento(req: Request, res: Response){
+    async readAllValores(req: Request, res: Response){
         // A variável "result" nesse caso será uma lista de tarefas
-        const result = await service.readAllPagamento()
+        const result = await service.readAllValores()
         if (result instanceof Error) {
             return res.status(500).json(result.message)
         }
         // Se a lista estiver vazia
         if (result.length == 0) {
             // Mostre a seguinte mensagem para o usuário
-
-            return res.status(200).json("No pagamentos found")
-
+            return res.status(200).json("No valoress found")
         }
         // Do contrário, devolva a lista para o usuário
         return res.status(200).json(result)
     }
 
-    async readOnePagamento(req: Request, res: Response){
+    async readOneValores(req: Request, res: Response){
         const { id } = req.params
-        const result = await service.readOnePagamento({id})
+        const result = await service.readOneValores({id})
         if (result instanceof Error) {
             res.status(404).json(result.message)
         }
         return res.json(result)
     }
 
-    async updatePagamento(req: Request, res: Response){
+    async updateValores(req: Request, res: Response){
         const { id } = req.params
-
-        //const { status } = req.body
-        const result = await service.updatePagamento({id})
-
+        const { descricao,valor } = req.body
+        const result = await service.updateValores({id, descricao, valor})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }
         return res.status(200).json(result)
     }
 
-    async deletePagamento(req: Request, res: Response){
+    async deleteValores(req: Request, res: Response){
         const { id } = req.params
-        const result = await service.deletePagamento({ id })
+        const result = await service.deleteValores({ id })
         if (result instanceof Error) {
           return res.status(404).json(result.message)
         }
