@@ -8,7 +8,7 @@ const cursor = DevDataSource.getRepository(Material)
 // 2) Cria interfaces para receber dados do CONTROLLER, que por sua vez vieram da Requisição HTTP lá do FRONTEND
 
 type newMaterialRequest = {
-    file: File,
+    file: Buffer,
     curso: string,
     turma: string,
     periodo: string,
@@ -21,7 +21,7 @@ type findMaterialRequest = {
 
 type updateMaterialRequest = {
     id: string
-    file: File,
+    file: Buffer,
     curso: string,
     turma: string,
     periodo: string

@@ -1,43 +1,43 @@
 import { Request, Response } from "express"
-import { MaterialService } from "../services/materialService"
+import { PedidoService } from "../services/pedidoService"
 
-const service = new MaterialService()
+const service = new PedidoService()
 
-export class MaterialController {
-    async createMaterial(req: Request, res: Response){
+export class PedidoController {
+    async createPedido(req: Request, res: Response){
         // Captura informações do formulário
-        const { file,curso,turma,periodo,usuario_id } = req.body
+        const { qtd_folhas,qtd_copias,colorida } = req.body
         // Passa informações capturadas para o service
-        const result = await service.createMaterial({file,curso,turma,periodo,usuario_id})
+        const result = await service.createPedido({qtd_folhas,qtd_copias,colorida})
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro
             return res.status(500).json(result.message)
         }
-        // Do contrário, se for uma nova Material, retorne-a para o usuário
+        // Do contrário, se for uma nova Pedido, retorne-a para o usuário
         return res.status(201).json(result)
     }
 
-    async readAllMaterial(req: Request, res: Response){
+    async readAllPedido(req: Request, res: Response){
         // A variável "result" nesse caso será uma lista de tarefas
-        const result = await service.readAllMaterial()
+        const result = await service.readAllPedido()
         if (result instanceof Error) {
             return res.status(500).json(result.message)
         }
         // Se a lista estiver vazia
         if (result.length == 0) {
             // Mostre a seguinte mensagem para o usuário
-            return res.status(200).json("No Materials found")
+            return res.status(200).json("No Pedidos found")
         }
         // Do contrário, devolva a lista para o usuário
         return res.status(200).json(result)
     }
 
-    async readOneMaterial(req: Request, res: Response): Promise<Response> {
+    async readOnePedido(req: Request, res: Response): Promise<Response> {
         const { id } = req.params;
         
         try {
-            const result = await service.readOneMaterial({ id });
+            const result = await service.readOnePedido({ id });
             
             if (result instanceof Error) {
                 return res.status(404).json({ error: result.message }); // Retorna imediatamente em caso de erro
@@ -49,20 +49,21 @@ export class MaterialController {
             return res.status(500).json({ error: "Unexpected error" }); // Retorna erro genérico em caso de exceção
         }
     }
+    
 
-    async updateMaterial(req: Request, res: Response){
+    async updatePedido(req: Request, res: Response){
         const { id } = req.params
-        const { file,curso,turma,periodo } = req.body
-        const result = await service.updateMaterial({id, file,curso,turma,periodo})
+        const { statusPedido } = req.body
+        const result = await service.updatePedido({id,statusPedido})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }
         return res.status(200).json(result)
     }
 
-    async deleteMaterial(req: Request, res: Response){
+    async deletePedido(req: Request, res: Response){
         const { id } = req.params
-        const result = await service.deleteMaterial({ id })
+        const result = await service.deletePedido({ id })
         if (result instanceof Error) {
           return res.status(404).json(result.message)
         }

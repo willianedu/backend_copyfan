@@ -4,6 +4,10 @@ import { Perfil } from "../models/perfil";
 
 import { Valores } from "../models/valores";
 
+import {Material} from "../models/material"
+import { Usuario } from "../models/usuario";
+import { Pedido } from "../models/pedido";
+
 
 export const DevDataSource = new DataSource({
     type: "postgres",
@@ -13,7 +17,7 @@ export const DevDataSource = new DataSource({
     password: "postgres",
     database: "backend_copyfan",
 
-    entities: [Pagamento,Perfil,Valores]
+    entities: [Pagamento,Perfil,Valores,Material,Usuario, Pedido]
 })
 
 

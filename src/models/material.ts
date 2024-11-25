@@ -7,8 +7,8 @@ export class Material {
     @PrimaryColumn()
     id: string
 
-    @Column()
-    file: File
+    @Column({ type: "bytea" })
+    file: Buffer;
 
     @Column()
     curso: string

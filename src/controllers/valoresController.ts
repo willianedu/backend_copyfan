@@ -33,13 +33,21 @@ export class ValoresController {
         return res.status(200).json(result)
     }
 
-    async readOneValores(req: Request, res: Response){
-        const { id } = req.params
-        const result = await service.readOneValores({id})
-        if (result instanceof Error) {
-            res.status(404).json(result.message)
+    async readOneValores(req: Request, res: Response): Promise<Response> {
+        const { id } = req.params;
+        
+        try {
+            const result = await service.readOneValores({ id });
+            
+            if (result instanceof Error) {
+                return res.status(404).json({ error: result.message }); // Retorna imediatamente em caso de erro
+            }
+    
+            return res.json(result); // Retorna o perfil caso não haja erro
+        } catch (err) {
+            console.error(err); // Log do erro para depuração
+            return res.status(500).json({ error: "Unexpected error" }); // Retorna erro genérico em caso de exceção
         }
-        return res.json(result)
     }
 
     async updateValores(req: Request, res: Response){
