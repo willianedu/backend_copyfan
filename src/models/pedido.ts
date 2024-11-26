@@ -16,25 +16,15 @@ export class Pedido {
     @Column()
     statusPedido: boolean
 
-    @Column()
-    qtd_folhas: number
-
-    @Column()
-    qtd_copias: number
-
-    @Column()
-    colorida: boolean
-
-    @Column()
+    @Column({nullable: false})
     pagamento_id: string
 
-    @Column()
+    @Column({nullable: false})
     usuario_id: string
 
     constructor(){
         this.id = uuid()
         this.dataHoraPedido = new Date()
         this.statusPedido = false
-        this.colorida = false
     }
 }

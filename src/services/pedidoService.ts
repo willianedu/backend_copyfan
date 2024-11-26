@@ -8,9 +8,8 @@ const cursor = DevDataSource.getRepository(Pedido)
 // 2) Cria interfaces para receber dados do CONTROLLER, que por sua vez vieram da Requisição HTTP lá do FRONTEND
 
 type newPedidoRequest = {
-    qtd_folhas: number,
-    qtd_copias: number,
-    colorida: boolean
+    pagamento_id: string,
+    usuario_id: string
 }
 
 type findPedidoRequest = {
@@ -23,11 +22,11 @@ type updatePedidoRequest = {
 }
 
 export class PedidoService {
-    async createPedido({ qtd_folhas,qtd_copias,colorida} : newPedidoRequest) : Promise<Pedido | Error> {
+    async createPedido({pagamento_id,usuario_id} : newPedidoRequest) : Promise<Pedido | Error> {
         try {
             // INSERT INTO Pedidos VALUES(description, date_Pedido)
             const pedido = cursor.create({
-                qtd_folhas,qtd_copias,colorida
+                pagamento_id,usuario_id
             })
             // A função cursor.save() executa a instrução INSERT na tabela
             await cursor.save(pedido)

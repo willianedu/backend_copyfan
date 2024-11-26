@@ -20,8 +20,12 @@ type findPerfilRequest = {
 }
 
 type updatePerfilRequest = {
-    id: string
-    descricao: string
+    id: string,
+    descricao: string,
+    criar_usuario: boolean,
+    editar_usuario: boolean,
+    excluir_usuario: boolean,
+    ler_usuario: boolean
 }
 
 export class PerfilService {
@@ -66,7 +70,7 @@ export class PerfilService {
         }
     }
     
-    async updatePerfil({ id, descricao} : updatePerfilRequest): Promise<Perfil | Error> {
+    async updatePerfil({ id, descricao,  criar_usuario, editar_usuario, excluir_usuario, ler_usuario} : updatePerfilRequest): Promise<Perfil | Error> {
         try {
             // SELECT * FROM Perfils WHERE id = id LIMIT 1
             const perfil = await cursor.findOne({ where: {id}})
@@ -74,6 +78,10 @@ export class PerfilService {
                 return new Error("Perfil not found!")
             }
             perfil.descricao = descricao
+            perfil.criar_usuario = criar_usuario
+            perfil.editar_usuario =editar_usuario
+            perfil.excluir_usuario = excluir_usuario
+            perfil.ler_usuario = ler_usuario
             
 
             await cursor.save(perfil)

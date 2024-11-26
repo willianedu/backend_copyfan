@@ -6,9 +6,9 @@ const service = new PagamentoService()
 export class PagamentoController {
     async createPagamento(req: Request, res: Response){
         // Captura informações do formulário
-        const { valorTotal,meioPagamento } = req.body
+        const { valorTotal,meioPagamento,valores_id } = req.body
         // Passa informações capturadas para o service
-        const result = await service.createPagamento({valorTotal,meioPagamento})
+        const result = await service.createPagamento({valorTotal,meioPagamento,valores_id})
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro

@@ -14,12 +14,9 @@ export class Material {
     curso: string
 
     @Column()
-    turma: string
+    turma_periodo:string
 
-    @Column()
-    periodo: string
-
-    @Column()
+    @Column({nullable: false})
     usuario_id: string
 
     constructor(){

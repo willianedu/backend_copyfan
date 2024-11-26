@@ -10,8 +10,7 @@ const cursor = DevDataSource.getRepository(Material)
 type newMaterialRequest = {
     file: Buffer,
     curso: string,
-    turma: string,
-    periodo: string,
+    turma_periodo: string,
     usuario_id: string
 }
 
@@ -23,16 +22,15 @@ type updateMaterialRequest = {
     id: string
     file: Buffer,
     curso: string,
-    turma: string,
-    periodo: string
+    turma_periodo: string
 }
 
 export class MaterialService {
-    async createMaterial({ file,curso,turma,periodo,usuario_id} : newMaterialRequest) : Promise<Material | Error> {
+    async createMaterial({ file,curso,turma_periodo,usuario_id} : newMaterialRequest) : Promise<Material | Error> {
         try {
             // INSERT INTO Materials VALUES(description, date_Material)
             const material = cursor.create({
-                file,curso,turma,periodo,usuario_id
+                file,curso,turma_periodo,usuario_id
             })
             // A função cursor.save() executa a instrução INSERT na tabela
             await cursor.save(material)
@@ -69,7 +67,7 @@ export class MaterialService {
         }
     }
     
-    async updateMaterial({ id, file,curso,turma,periodo} : updateMaterialRequest): Promise<Material | Error> {
+    async updateMaterial({ id, file,curso,turma_periodo} : updateMaterialRequest): Promise<Material | Error> {
         try {
             // SELECT * FROM Materials WHERE id = id LIMIT 1
             const material = await cursor.findOne({ where: {id}})
@@ -79,8 +77,7 @@ export class MaterialService {
             // Se houver uma nova descrição e/ou data informados pelo usuário vindos da requisição, a tarefa será atualizada com os novos dados; senão, os dados antigos serão mantidos.
             material.file = file
             material.curso = curso
-            material.turma = turma
-            material.periodo = periodo
+            material.turma_periodo = turma_periodo
             // UPDATE Materials WHERE id = id SET description = description, date_Material = date_Material
             await cursor.save(material)
             return material

@@ -21,7 +21,7 @@ export class Pagamento {
     @Column({ nullable: false })
     meioPagamento: string
 
-    @Column()
+    @Column({nullable: false})
     valores_id: string
 
     constructor(){

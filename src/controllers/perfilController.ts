@@ -53,8 +53,8 @@ export class PerfilController {
 
     async updatePerfil(req: Request, res: Response){
         const { id } = req.params
-        const { descricao } = req.body
-        const result = await service.updatePerfil({id,descricao})
+        const { descricao,criar_usuario, editar_usuario, excluir_usuario, ler_usuario } = req.body
+        const result = await service.updatePerfil({id,descricao,criar_usuario, editar_usuario, excluir_usuario, ler_usuario})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }

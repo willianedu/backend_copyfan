@@ -10,6 +10,7 @@ const cursor = DevDataSource.getRepository(Pagamento)
 type newPagamentoRequest = {
     valorTotal: number 
     meioPagamento: string
+    valores_id: string
 }
 
 type findPagamentoRequest = {
@@ -22,11 +23,11 @@ type updatePagamentoRequest = {
 }
 
 export class PagamentoService {
-    async createPagamento({ valorTotal,meioPagamento} : newPagamentoRequest) : Promise<Pagamento | Error> {
+    async createPagamento({ valorTotal,meioPagamento,valores_id} : newPagamentoRequest) : Promise<Pagamento | Error> {
         try {
             // INSERT INTO Pagamentos VALUES(description, date_Pagamento)
             const pagamento = cursor.create({
-                valorTotal,meioPagamento
+                valorTotal,meioPagamento,valores_id
             })
             // A função cursor.save() executa a instrução INSERT na tabela
             await cursor.save(pagamento)

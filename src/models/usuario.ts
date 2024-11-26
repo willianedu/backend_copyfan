@@ -9,7 +9,7 @@ export class Usuario {
     @Column({nullable: false})
     matricula: string
     
-    @Column()
+    @Column({nullable: false})
     perfil_id: string
 
     constructor() {

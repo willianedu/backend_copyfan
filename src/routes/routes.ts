@@ -6,6 +6,8 @@ import { ValoresController } from "../controllers/valoresController"
 import { MaterialController } from "../controllers/materialController"
 import { UsuarioController} from "../controllers/usuarioController"
 import { PedidoController } from "../controllers/pedidoController"
+import { CursoController } from "../controllers/cursoController"
+import { MaterialPedidoController } from "../controllers/materialPedidoController"
 
 const router = Router()
 const controllerPagamento = new PagamentoController()
@@ -14,7 +16,8 @@ const controllerValores = new ValoresController()
 const controllerMateriais = new MaterialController()
 const controllerUsuario = new UsuarioController()
 const controllerPedido = new PedidoController()
-
+const controllerCurso = new CursoController()
+const controllerMaterialPedido = new MaterialPedidoController()
 
 // Rota da tela principal
 router.get("/", (request, response) => {
@@ -89,5 +92,27 @@ router.put("/pedidos/:id", controllerPedido.updatePedido)
 
 router.delete("/pedidos/:id" , controllerPedido.deletePedido)
 
+// Rota Read All
+router.get("/cursos", controllerCurso.readAllCurso) 
+// Rota Read One
+router.get("/cursos/:id",controllerCurso.readOneCurso)
+
+router.post("/cursos", controllerCurso.createCurso)
+//
+router.put("/cursos/:id", controllerCurso.updateCurso)
+
+router.delete("/cursos/:id" , controllerCurso.deleteCurso)
+
+
+// Rota Read All
+router.get("/materiaispedidos", controllerMaterialPedido.readAllMaterialPedido) 
+// Rota Read One
+router.get("/materiaispedidos/:id_pedido/:id_material",controllerMaterialPedido.readOneMaterialPedido)
+
+router.post("/materiaispedidos", controllerMaterialPedido.createMaterialPedido)
+//
+router.put("/materiaispedidos/:id_pedido/:id_material", controllerMaterialPedido.updateMaterialPedido)
+
+router.delete("/materiaispedidos/:id_pedido/:id_material" , controllerMaterialPedido.deleteMaterialPedido)
 
 export default router

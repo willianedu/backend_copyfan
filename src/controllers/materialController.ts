@@ -6,9 +6,9 @@ const service = new MaterialService()
 export class MaterialController {
     async createMaterial(req: Request, res: Response){
         // Captura informações do formulário
-        const { file,curso,turma,periodo,usuario_id } = req.body
+        const { file,curso,turma_periodo,usuario_id } = req.body
         // Passa informações capturadas para o service
-        const result = await service.createMaterial({file,curso,turma,periodo,usuario_id})
+        const result = await service.createMaterial({file,curso,turma_periodo,usuario_id})
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro
@@ -52,8 +52,8 @@ export class MaterialController {
 
     async updateMaterial(req: Request, res: Response){
         const { id } = req.params
-        const { file,curso,turma,periodo } = req.body
-        const result = await service.updateMaterial({id, file,curso,turma,periodo})
+        const { file,curso,turma_periodo} = req.body
+        const result = await service.updateMaterial({id, file,curso,turma_periodo})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }
