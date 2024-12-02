@@ -26,5 +26,6 @@ export class Curso {
 
     constructor(){
         this.id = uuid()
+        this.ativo = false
     }
 }

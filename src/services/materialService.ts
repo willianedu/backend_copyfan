@@ -1,5 +1,7 @@
 import { DevDataSource } from "../connections/dbDev";
 import { Material   } from "../models/material";
+import { Curso } from "../models/curso";
+import { Usuario } from "../models/usuario";
 
 // 1) Estabelece conexão com a tabela alvo no banco de dados através de um cursor. Um cursor é um objeto que permite fazer consultas ao banco de dados via aplicação. Essas consultas são feitas na tabela do Repository que está na conexão do DataSource.
 
@@ -25,20 +27,60 @@ type updateMaterialRequest = {
 }
 
 export class MaterialService {
-    async createMaterial({ file,curso_id,turma_periodo,usuario_id} : newMaterialRequest) : Promise<Material | Error> {
+    async createMaterial({
+        file,
+        curso_id,
+        turma_periodo,
+        usuario_id,
+    }: newMaterialRequest): Promise<Material | Error> {
         try {
-            // INSERT INTO Materials VALUES(description, date_Material)
+            // Validação básica dos campos obrigatórios
+            if (!file || typeof file !== "string") {
+                return new Error("Invalid or missing file.");
+            }
+            if (!curso_id) {
+                return new Error("curso_id is required.");
+            }
+            if (!turma_periodo) {
+                return new Error("turma_periodo is required.");
+            }
+            if (!usuario_id) {
+                return new Error("usuario_id is required.");
+            }
+    
+            // Verificar se o Curso existe
+            const curso = await DevDataSource.getRepository(Curso).findOne({
+                where: { id: curso_id },
+            });
+            if (!curso) {
+                return new Error("Curso not found!");
+            }
+            // Verificar se o Usuário existe
+            const usuario = await DevDataSource.getRepository(Usuario).findOne({
+                where: { id: usuario_id },
+            });
+            if (!usuario) {
+                return new Error("Usuario not found!");
+            }
+    
+            // Criando o novo Material
             const material = cursor.create({
-                file,curso_id,turma_periodo,usuario_id
-            })
-            // A função cursor.save() executa a instrução INSERT na tabela
-            await cursor.save(material)
-            return material
-        }
-        catch(err){
-            return new Error("Unexpected error saving Material!")
+                file,
+                curso_id,
+                turma_periodo,
+                usuario_id,
+            });
+    
+            // Salvando no banco de dados
+            await cursor.save(material);
+    
+            return material;
+        } catch (err) {
+            console.error("Error creating Material:", err);
+            return new Error("Unexpected error saving Material!");
         }
     }
+    
     
     async readOneMaterial({ id } : findMaterialRequest) : Promise<Material | Error> {
         try {

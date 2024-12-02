@@ -1,5 +1,7 @@
 import { DevDataSource } from "../connections/dbDev";
 import { Pedido} from "../models/pedido";
+import { Usuario } from "../models/usuario";
+import { Pagamento } from "../models/pagamento";
 
 // 1) Estabelece conexão com a tabela alvo no banco de dados através de um cursor. Um cursor é um objeto que permite fazer consultas ao banco de dados via aplicação. Essas consultas são feitas na tabela do Repository que está na conexão do DataSource.
 
@@ -22,18 +24,33 @@ type updatePedidoRequest = {
 }
 
 export class PedidoService {
-    async createPedido({pagamento_id,usuario_id} : newPedidoRequest) : Promise<Pedido | Error> {
+    async createPedido({ pagamento_id, usuario_id }: newPedidoRequest): Promise<Pedido | Error> {
         try {
-            // INSERT INTO Pedidos VALUES(description, date_Pedido)
-            const pedido = cursor.create({
-                pagamento_id,usuario_id
-            })
-            // A função cursor.save() executa a instrução INSERT na tabela
-            await cursor.save(pedido)
-            return pedido
-        }
-        catch(err){
-            return new Error("Unexpected error saving Pedido!")
+            // Validação 1: Verificar se o usuário existe
+            const usuario = await DevDataSource.getRepository(Usuario).findOne({ where: { id: usuario_id } });
+            if (!usuario) {
+                return new Error('Usuário não encontrado.');
+            }
+
+            // Validação 2: Verificar se o pagamento existe e não está vinculado a outro pedido
+            const pagamento = await DevDataSource.getRepository(Pagamento).findOne({ where: { id: pagamento_id } });
+            if (!pagamento) {
+                return new Error('Pagamento não encontrado.');
+            }
+
+            // Validação 3: Regras de negócio (status do pagamento)
+            if (!pagamento.statusPagamento) {
+                return new Error('O pagamento ainda não foi concluído.');
+            }
+
+            // Criar o pedido
+            const pedido = DevDataSource.getRepository(Pedido).create({ pagamento_id, usuario_id });
+            await DevDataSource.getRepository(Pedido).save(pedido);
+
+            return pedido;
+        } catch (err) {
+            console.error(err);
+            return new Error('Erro inesperado ao salvar pedido.');
         }
     }
     

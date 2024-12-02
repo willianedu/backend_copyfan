@@ -4,18 +4,30 @@ import { PedidoService } from "../services/pedidoService"
 const service = new PedidoService()
 
 export class PedidoController {
-    async createPedido(req: Request, res: Response){
-        // Captura informações do formulário
-        const { pagamento_id,usuario_id } = req.body
-        // Passa informações capturadas para o service
-        const result = await service.createPedido({pagamento_id,usuario_id})
-        // Se o resultado for uma instância de erro
+    async createPedido(req: Request, res: Response) {
+        const { pagamento_id, usuario_id } = req.body;
+
+        // Chama o serviço para criar o pedido
+        const result = await service.createPedido({ pagamento_id, usuario_id });
+
         if (result instanceof Error) {
-            // Retorna a mensagem do erro
-            return res.status(500).json(result.message)
+            // Retorna mensagens de erro personalizadas com status HTTP apropriado
+            if (result.message === 'Usuário não encontrado.') {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result.message === 'Pagamento não encontrado.') {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result.message === 'O pagamento ainda não foi concluído.') {
+                return res.status(400).json({ error: result.message });
+            }
+
+            // Caso erro genérico
+            return res.status(500).json({ error: result.message });
         }
-        // Do contrário, se for uma nova Pedido, retorne-a para o usuário
-        return res.status(201).json(result)
+
+        // Retorna o pedido criado com status 201
+        return res.status(201).json(result);
     }
     
     async readAllPedido(req: Request, res: Response){

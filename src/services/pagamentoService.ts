@@ -1,5 +1,6 @@
 import { DevDataSource } from "../connections/dbDev";
 import { Pagamento} from "../models/pagamento";
+import { Valores } from "../models/valores";
 
 // 1) Estabelece conexão com a tabela alvo no banco de dados através de um cursor. Um cursor é um objeto que permite fazer consultas ao banco de dados via aplicação. Essas consultas são feitas na tabela do Repository que está na conexão do DataSource.
 
@@ -23,18 +24,42 @@ type updatePagamentoRequest = {
 }
 
 export class PagamentoService {
-    async createPagamento({ valorTotal,meioPagamento,valores_id} : newPagamentoRequest) : Promise<Pagamento | Error> {
+    async createPagamento({ valorTotal, meioPagamento, valores_id }: newPagamentoRequest): Promise<Pagamento | Error> {
         try {
-            // INSERT INTO Pagamentos VALUES(description, date_Pagamento)
+            // Validação dos campos obrigatórios
+            if (!valorTotal || typeof valorTotal !== "number" || valorTotal <= 0) {
+                return new Error("Invalid valorTotal. It must be a positive number.");
+            }
+            
+            const validMeiosPagamento = ["Cartão", "Dinheiro", "Pix"]; // Adapte conforme necessário
+            if (!meioPagamento || !validMeiosPagamento.includes(meioPagamento)) {
+                return new Error(`Invalid meioPagamento. Allowed values are: ${validMeiosPagamento.join(", ")}`);
+            }
+    
+            if (!valores_id) {
+                return new Error("valores_id is required.");
+            }
+    
+            // Verifica se o valores_id existe no banco de dados
+            const valor = await DevDataSource.getRepository(Valores).findOne({ where: { id: valores_id } });
+            if (!valor) {
+                return new Error("Invalid valores_id. Related record not found.");
+            }
+    
+            // Cria o pagamento
             const pagamento = cursor.create({
-                valorTotal,meioPagamento,valores_id
-            })
-            // A função cursor.save() executa a instrução INSERT na tabela
-            await cursor.save(pagamento)
-            return pagamento
-        }
-        catch(err){
-            return new Error("Unexpected error saving Pagamento!")
+                valorTotal,
+                meioPagamento,
+                valores_id,
+            });
+    
+            // Salva o pagamento no banco de dados
+            await cursor.save(pagamento);
+    
+            return pagamento;
+        } catch (err) {
+            console.error("Error saving Pagamento:", err); // Log detalhado para depuração
+            return new Error("Unexpected error saving Pagamento!");
         }
     }
     
