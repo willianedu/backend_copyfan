@@ -17,7 +17,7 @@ export class PedidoController {
         // Do contrário, se for uma nova Pedido, retorne-a para o usuário
         return res.status(201).json(result)
     }
-
+    
     async readAllPedido(req: Request, res: Response){
         // A variável "result" nesse caso será uma lista de tarefas
         const result = await service.readAllPedido()

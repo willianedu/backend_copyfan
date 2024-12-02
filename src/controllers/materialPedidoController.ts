@@ -6,9 +6,9 @@ const service = new MaterialPedidoService()
 export class MaterialPedidoController {
     async createMaterialPedido(req: Request, res: Response){
         // Captura informações do formulário
-        const { frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim } = req.body
+        const { frente_verso, qtd_copias_colorida, qtd_copias_pb, encadernacao, pagina_inicio, pagina_fim,id_material, id_pedido} = req.body
         // Passa informações capturadas para o service
-        const result = await service.createMaterialPedido({frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim})
+        const result = await service.createMaterialPedido({frente_verso, qtd_copias_colorida, qtd_copias_pb, encadernacao, pagina_inicio, pagina_fim,id_material, id_pedido})
         // Se o resultado for uma instância de erro
         if (result instanceof Error) {
             // Retorna a mensagem do erro
@@ -52,8 +52,8 @@ export class MaterialPedidoController {
 
     async updateMaterialPedido(req: Request, res: Response){
         const { id_pedido, id_material } = req.params
-        const { frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim} = req.body
-        const result = await service.updateMaterialPedido({id_pedido, id_material, frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim})
+        const { frente_verso, qtd_copias_colorida, qtd_copias_pb, encadernacao, pagina_inicio, pagina_fim} = req.body
+        const result = await service.updateMaterialPedido({id_pedido, id_material, frente_verso, qtd_copias_colorida, qtd_copias_pb, encadernacao, pagina_inicio, pagina_fim})
         if (result instanceof Error){
             return res.status(404).json(result.message)
         }

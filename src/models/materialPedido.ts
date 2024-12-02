@@ -17,7 +17,7 @@ export class MaterialPedido {
     qtd_copias_colorida: string
 
     @Column()
-    qtd_copis_pb: string
+    qtd_copias_pb: string
 
     @Column()
     encadernacao: boolean

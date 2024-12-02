@@ -10,8 +10,8 @@ export class Material {
     @Column({ type: "bytea" })
     file: Buffer;
 
-    @Column()
-    curso: string
+    @Column({nullable: false})
+    curso_id: string
 
     @Column()
     turma_periodo:string

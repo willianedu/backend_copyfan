@@ -1,5 +1,8 @@
 import { DevDataSource } from "../connections/dbDev";
 import { Usuario} from "../models/usuario";
+import {Perfil} from "../models/perfil"
+
+const perfilCursor = DevDataSource.getRepository(Perfil);
 
 // 1) Estabelece conexão com a tabela alvo no banco de dados através de um cursor. Um cursor é um objeto que permite fazer consultas ao banco de dados via aplicação. Essas consultas são feitas na tabela do Repository que está na conexão do DataSource.
 
@@ -22,20 +25,32 @@ type updateUsuarioRequest = {
 }
 
 export class UsuarioService {
-    async createUsuario({ matricula,perfil_id} : newUsuarioRequest) : Promise<Usuario | Error> {
+    async createUsuario({ matricula, perfil_id }: newUsuarioRequest): Promise<Usuario | Error> {
         try {
-            // INSERT INTO Usuarios VALUES(description, date_Usuario)
-            const usuario = cursor.create({
-                matricula,perfil_id
-            })
-            // A função cursor.save() executa a instrução INSERT na tabela
-            await cursor.save(usuario)
-            return usuario
-        }
-        catch(err){
-            return new Error("Unexpected error saving Usuario!")
+            // Valida se a matrícula já existe
+            const existingUsuario = await cursor.findOne({ where: { matricula } });
+            if (existingUsuario) {
+                return new Error('Matrícula já está em uso.');
+            }
+    
+            // Valida se o perfil existe
+            const existingPerfil = await perfilCursor.findOne({ where: { id: perfil_id } });
+            if (!existingPerfil) {
+                return new Error('Perfil não encontrado.');
+            }
+    
+            // Cria o usuário no banco
+            const usuario = cursor.create({ matricula, perfil_id });
+            await cursor.save(usuario);
+    
+            return usuario;
+        } catch (err) {
+            // Captura erros inesperados
+            console.error(err);
+            return new Error('Erro inesperado ao salvar usuário.');
         }
     }
+    
     
     async readOneUsuario({ id } : findUsuarioRequest) : Promise<Usuario | Error> {
         try {

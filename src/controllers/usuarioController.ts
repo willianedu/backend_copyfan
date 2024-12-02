@@ -4,19 +4,27 @@ import { UsuarioService } from "../services/usuarioService"
 const service = new UsuarioService()
 
 export class UsuarioController {
-    async createUsuario(req: Request, res: Response){
-        // Captura informações do formulário
-        const {matricula,perfil_id } = req.body
-        // Passa informações capturadas para o service
-        const result = await service.createUsuario({matricula,perfil_id})
-        // Se o resultado for uma instância de erro
+    async createUsuario(req: Request, res: Response) {
+        const { matricula, perfil_id } = req.body;
+    
+        // Passa informações para o serviço
+        const result = await service.createUsuario({ matricula, perfil_id });
+    
+        // Tratar diferentes tipos de erro
         if (result instanceof Error) {
-            // Retorna a mensagem do erro
-            return res.status(500).json(result.message)
+            if (result.message === 'Matrícula já está em uso.') {
+                return res.status(400).json({ error: result.message });
+            }
+            if (result.message === 'Perfil não encontrado.') {
+                return res.status(404).json({ error: result.message });
+            }
+            return res.status(500).json({ error: result.message });
         }
-        // Do contrário, se for uma nova Usuario, retorne-a para o usuário
-        return res.status(201).json(result)
+    
+        // Retorna o usuário criado
+        return res.status(201).json(result);
     }
+    
 
     async readAllUsuario(req: Request, res: Response){
         // A variável "result" nesse caso será uma lista de tarefas

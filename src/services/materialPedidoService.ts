@@ -1,5 +1,7 @@
 import { DevDataSource } from "../connections/dbDev";
 import { MaterialPedido} from "../models/materialPedido";
+import { Material } from "../models/material";
+import { Pedido } from "../models/pedido";
 
 // 1) Estabelece conexão com a tabela alvo no banco de dados através de um cursor. Um cursor é um objeto que permite fazer consultas ao banco de dados via aplicação. Essas consultas são feitas na tabela do Repository que está na conexão do DataSource.
 
@@ -8,9 +10,11 @@ const cursor = DevDataSource.getRepository(MaterialPedido)
 // 2) Cria interfaces para receber dados do CONTROLLER, que por sua vez vieram da Requisição HTTP lá do FRONTEND
 
 type newMaterialPedidoRequest = {
+    id_material:string,
+    id_pedido: string,
     frente_verso: boolean,
     qtd_copias_colorida: string,
-    qtd_copis_pb: string,
+    qtd_copias_pb: string,
     encadernacao: boolean,
     pagina_inicio: string,
     pagina_fim: string
@@ -26,7 +30,7 @@ type updateMaterialPedidoRequest = {
     id_pedido: string,
     frente_verso: boolean,
     qtd_copias_colorida: string,
-    qtd_copis_pb: string,
+    qtd_copias_pb: string,
     encadernacao: boolean,
     pagina_inicio: string,
     pagina_fim: string
@@ -34,18 +38,38 @@ type updateMaterialPedidoRequest = {
 
 
 export class MaterialPedidoService {
-    async createMaterialPedido({frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim} : newMaterialPedidoRequest) : Promise<MaterialPedido | Error> {
+    async createMaterialPedido({ frente_verso, qtd_copias_colorida, qtd_copias_pb, encadernacao, pagina_inicio, pagina_fim, id_material, id_pedido }: newMaterialPedidoRequest): Promise<MaterialPedido | Error> {
         try {
-            // INSERT INTO MaterialPedidos VALUES(description, date_MaterialPedido)
+            // Verificar se o Material existe
+            const material = await DevDataSource.getRepository(Material).findOne({ where: { id:id_material } });
+            if (!material) {
+                return new Error("Material not found!");
+            }
+    
+            // Verificar se o Pedido existe
+            const pedido = await DevDataSource.getRepository(Pedido).findOne({ where: { id:id_pedido } });
+            if (!pedido) {
+                return new Error("Pedido not found!");
+            }
+    
+            // Criando o novo MaterialPedido
             const materialPedido = cursor.create({
-                frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim
-            })
-            // A função cursor.save() executa a instrução INSERT na tabela
-            await cursor.save(materialPedido)
-            return materialPedido
-        }
-        catch(err){
-            return new Error("Unexpected error saving MaterialPedido!")
+                id_material,
+                id_pedido,
+                frente_verso,
+                qtd_copias_colorida,
+                qtd_copias_pb,
+                encadernacao,
+                pagina_inicio,
+                pagina_fim
+            });
+    
+            // Salvando no banco de dados
+            await cursor.save(materialPedido);
+    
+            return materialPedido;
+        } catch (err) {
+            return new Error("Unexpected error saving MaterialPedido!");
         }
     }
     
@@ -80,7 +104,7 @@ export class MaterialPedidoService {
         }
     }
     
-    async updateMaterialPedido({ id_pedido,id_material,frente_verso, qtd_copias_colorida, qtd_copis_pb, encadernacao, pagina_inicio, pagina_fim} : updateMaterialPedidoRequest): Promise<MaterialPedido | Error> {
+    async updateMaterialPedido({ id_pedido,id_material,frente_verso, qtd_copias_colorida, qtd_copias_pb, encadernacao, pagina_inicio, pagina_fim} : updateMaterialPedidoRequest): Promise<MaterialPedido | Error> {
         try {
             // SELECT * FROM MaterialPedidos WHERE id = id LIMIT 1
             const materialPedido = await cursor.findOne({
@@ -94,7 +118,7 @@ export class MaterialPedidoService {
             }
             materialPedido.frente_verso = frente_verso
             materialPedido.qtd_copias_colorida = qtd_copias_colorida
-            materialPedido.qtd_copis_pb = qtd_copis_pb
+            materialPedido.qtd_copias_pb = qtd_copias_pb
             materialPedido.encadernacao = encadernacao
             materialPedido.pagina_inicio = pagina_inicio
             materialPedido.pagina_fim = pagina_fim
